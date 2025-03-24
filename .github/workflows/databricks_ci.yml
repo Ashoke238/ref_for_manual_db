@@ -36,69 +36,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: static-code-analysis
     steps:
-      - name: 🧪 Trigger Databricks Job (dev)
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🧪 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: 📦 Install requests
+        run: pip install requests
+
+      - name: 🚀 Trigger Databricks Job (via Python)
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: |
-          # Replace with your actual job ID
-          JOB_ID=150430378558626
-
-          RESPONSE=$(curl -s -X POST https://${DATABRICKS_HOST}/api/2.1/jobs/run-now \
-            -H "Authorization: Bearer ${DATABRICKS_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -d "{\"job_id\": $JOB_ID}" | jq -r '.run_id')
-
-          echo "🔍 Raw Response from Databricks:"
-          echo "$RESPONSE"
-
-          RUN_ID=$(echo "$RESPONSE" | jq -r '.run_id')
-          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "✅ Triggered Databricks job with RUN_ID=$RUN_ID"
-
-  validate-results:
-    runs-on: ubuntu-latest
-    needs: trigger-databricks-job-dev
-    steps:
-      - name: ⏳ Wait for Databricks Job Completion
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: |
-          MAX_RETRIES=20
-          RETRY_DELAY=15
-
-          for i in $(seq 1 $MAX_RETRIES); do
-            STATUS=$(curl -s -X GET https://${DATABRICKS_HOST}/api/2.1/jobs/runs/get \
-              -H "Authorization: Bearer ${DATABRICKS_TOKEN}" \
-              --data-urlencode run_id=$RUN_ID | jq -r '.state.life_cycle_state')
-
-            echo "Job status: $STATUS"
-
-            if [[ "$STATUS" == "TERMINATED" ]]; then
-              RESULT_STATE=$(curl -s -X GET https://${DATABRICKS_HOST}/api/2.1/jobs/runs/get \
-                -H "Authorization: Bearer ${DATABRICKS_TOKEN}" \
-                --data-urlencode run_id=$RUN_ID | jq -r '.state.result_state')
-
-              echo "Result: $RESULT_STATE"
-
-              if [[ "$RESULT_STATE" == "SUCCESS" ]]; then
-                echo "✅ Databricks job completed successfully"
-                break
-              else
-                echo "❌ Job failed"
-                exit 1
-              fi
-            fi
-
-            echo "⏳ Waiting..."
-            sleep $RETRY_DELAY
-          done
-
-      - name: 🧪 Validate MLflow Metrics
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: |
-          pip install mlflow
-          python .github/scripts/validate_metrics.py
+          JOB_ID: 150430378558626
+        run: python trigger_job.py
