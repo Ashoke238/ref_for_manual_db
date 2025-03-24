@@ -72,7 +72,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: python .github/scripts/validate_metrics.py
 
-  trigger-inference-job:
+    trigger-inference-job:
     runs-on: ubuntu-latest
     needs: train-and-validate
     steps:
@@ -100,6 +100,7 @@ jobs:
         with:
           name: inference-run-id
           path: inference_run_id.txt
+
 
   wait-and-validate-inference:
     runs-on: ubuntu-latest
