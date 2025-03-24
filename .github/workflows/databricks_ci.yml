@@ -50,8 +50,8 @@ jobs:
 
       - name: 🚀 Run train notebook (check for errors)
         run: |
-          papermill Demo_train_Notebook1.ipynb /dev/null
+          papermill Demo_train_Notebook1.ipynb /dev/null -k python3
 
       - name: 🚀 Run inference notebook (check for errors)
         run: |
-          papermill Demo_inference_Notebook1.ipynb /dev/null
+          papermill Demo_inference_Notebook1.ipynb /dev/null -k python3
