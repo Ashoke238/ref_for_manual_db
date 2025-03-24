@@ -10,7 +10,7 @@ user_email = os.getenv("USER_EMAIL")
 env = "prod" if branch == "main" else "dev"
 
 # Build dynamic experiment name
-experiment_name = f"/Users/{user_email}/{repo}-train-{env}"
+experiment_name = f"/Users/{user_email}/{repo}_train_{env}"
 print(f"🔍 Checking experiment: {experiment_name}")
 
 # Query MLflow
