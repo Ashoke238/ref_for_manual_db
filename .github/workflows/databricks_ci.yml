@@ -64,7 +64,7 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF_NAME: ${{ github.ref_name }}
-          USER_EMAIL: sashokekumar@gmail.com
+          USER_EMAIL: ${{ secrets.MLFLOW_USER_EMAIL }}
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: python .github/scripts/validate_metrics.py
