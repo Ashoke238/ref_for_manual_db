@@ -24,7 +24,7 @@ response = requests.post(
 if response.ok:
     run_id = response.json().get("run_id")
     if run_id:
-        print(f"✅ RUN_ID={run_id}")
+        print(f"✅ RUN_ID ={run_id}")
         # Save to GitHub Actions env file
         with open(os.environ["GITHUB_ENV"], "a") as f:
             f.write(f"RUN_ID={run_id}\n")
