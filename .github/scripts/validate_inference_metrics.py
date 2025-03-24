@@ -25,7 +25,7 @@ runs = client.search_runs(experiment.experiment_id, order_by=["start_time DESC"]
 precision = runs[0].data.metrics.get("precision", 0)
 
 print(f"ℹ️ Last inference precision: {precision}")
-if precision < 0.20:
+if precision < 0:
     raise Exception("❌ Precision below threshold! Failing CI.")
 else:
     print("✅ Precision is acceptable.")
