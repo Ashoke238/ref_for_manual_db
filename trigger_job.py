@@ -5,6 +5,7 @@ import requests
 host = os.environ.get("DATABRICKS_HOST")
 token = os.environ.get("DATABRICKS_TOKEN")
 job_id = os.environ.get("JOB_ID")
+output_file = os.getenv("RUN_ID_FILE", "run_id.txt")  # default fallback
 
 headers = {
     "Authorization": f"Bearer {token}",
@@ -26,8 +27,8 @@ if response.ok:
     if run_id:
         print(f"✅ RUN_ID ={run_id}")
         # Save to GitHub Actions env file
-        with open(os.environ["GITHUB_ENV"], "a") as f:
-            f.write(f"RUN_ID={run_id}\n")
+        with open(output_file, "w") as f:
+            f.write(str(run_id))
     else:
         print("❌ run_id missing in response:", response.json())
         exit(1)
