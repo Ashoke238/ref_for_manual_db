@@ -16,7 +16,7 @@ payload = {
 }
 
 response = requests.post(
-    f"https://{host}/api/2.1/jobs/run-now",
+    f"{host}/api/2.1/jobs/run-now",
     headers=headers,
     json=payload
 )
