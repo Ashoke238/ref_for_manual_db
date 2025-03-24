@@ -46,7 +46,8 @@ jobs:
 
       - name: 📦 Install papermill + dependencies
         run: |
-          pip install papermill pandas scikit-learn mlflow
+          pip install ipykernel papermill pandas scikit-learn mlflow
+          python -m ipykernel install --user --name=python3
 
       - name: 🚀 Run train notebook (check for errors)
         run: |
