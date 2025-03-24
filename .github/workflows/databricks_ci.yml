@@ -68,7 +68,7 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: python .github/scripts/validate_metrics.py
-        
+
 
   trigger-inference-job:
       runs-on: ubuntu-latest
@@ -89,5 +89,5 @@ jobs:
           env:
             DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
             DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-            JOB_ID: 150430378558627  # replace with your inference job ID
+            JOB_ID: 643177853687692  # replace with your inference job ID
           run: python trigger_job.py
