@@ -72,7 +72,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: python .github/scripts/validate_metrics.py
 
-  trigger-inference-job:
+  inference-and-validate:
     runs-on: ubuntu-latest
     needs: train-and-validate
 
@@ -85,43 +85,16 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: 📦 Install requests
-        run: pip install requests
+      - name: 📦 Install dependencies
+        run: pip install requests mlflow
 
       - name: 🚀 Trigger Databricks Inference Job
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-          JOB_ID: 643177853687692  # replace with your actual inference job ID
+          JOB_ID: 643177853687692  # Replace with your inference job ID
           RUN_ID_FILE: inference_run_id.txt
         run: python trigger_job.py
-
-      - name: 📤 Upload Inference RUN_ID
-        uses: actions/upload-artifact@v3.1.3
-        with:
-          name: inference-run-id
-          path: inference_run_id.txt
-
-
-  wait-and-validate-inference:
-    runs-on: ubuntu-latest
-    needs: trigger-inference-job
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v3
-
-      - name: 📦 Download Inference RUN_ID
-        uses: actions/download-artifact@v3
-        with:
-          name: inference-run-id
-
-      - name: 🧪 Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: 📦 Install dependencies
-        run: pip install requests mlflow
 
       - name: 🔁 Export RUN_ID for inference
         run: echo "RUN_ID=$(cat inference_run_id.txt)" >> $GITHUB_ENV
