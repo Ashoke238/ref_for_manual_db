@@ -1,5 +1,9 @@
 import os
+import mlflow
 from mlflow.tracking import MlflowClient
+
+# Set tracking URI for Databricks
+mlflow.set_tracking_uri("databricks")
 
 # Get environment variables
 repo = os.getenv("GITHUB_REPOSITORY", "").split("/")[-1]
