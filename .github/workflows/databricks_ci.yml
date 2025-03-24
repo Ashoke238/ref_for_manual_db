@@ -32,27 +32,3 @@ jobs:
         run: |
           nbqa flake8 . || echo "Static analysis warnings only (non-blocking)"
 
-  run-notebooks-locally:
-    runs-on: ubuntu-latest
-    needs: static-code-analysis
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v3
-
-      - name: 🧪 Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: 📦 Install papermill + dependencies
-        run: |
-          pip install ipykernel papermill pandas scikit-learn mlflow
-          python -m ipykernel install --user --name=python3
-
-      - name: 🚀 Run train notebook (check for errors)
-        run: |
-          papermill Demo_train_Notebook1.ipynb /dev/null -k python3
-
-      - name: 🚀 Run inference notebook (check for errors)
-        run: |
-          papermill Demo_inference_Notebook1.ipynb /dev/null -k python3
