@@ -1,10 +1,15 @@
 import os
 from mlflow.tracking import MlflowClient
+import mlflow
+
+# Set tracking URI for Databricks
+mlflow.set_tracking_uri("databricks")
 
 # Dynamic experiment path logic
 repo = os.getenv("GITHUB_REPOSITORY", "").split("/")[-1]
 branch = os.getenv("GITHUB_REF_NAME", "dev")
 user_email = os.getenv("USER_EMAIL")
+
 env = "prod" if branch == "main" else "dev"
 
 # Inference experiment path format
