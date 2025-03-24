@@ -30,7 +30,7 @@ jobs:
 
       - name: 🔍 Run nbqa flake8 on notebooks
         run: |
-          nbqa flake8 notebooks/ || echo "Static analysis warnings only (non-blocking)"
+          nbqa flake8 . || echo "Static analysis warnings only (non-blocking)"
 
   run-notebooks-locally:
     runs-on: ubuntu-latest
@@ -50,8 +50,8 @@ jobs:
 
       - name: 🚀 Run train notebook (check for errors)
         run: |
-          papermill notebooks/Demo_train_Notebook1.ipynb /dev/null
+          papermill Demo_train_Notebook1.ipynb /dev/null
 
       - name: 🚀 Run inference notebook (check for errors)
         run: |
-          papermill notebooks/Demo_inference_Notebook1.ipynb /dev/null
+          papermill Demo_inference_Notebook1.ipynb /dev/null
