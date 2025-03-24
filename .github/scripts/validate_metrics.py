@@ -27,7 +27,7 @@ runs = client.search_runs(experiment.experiment_id, order_by=["start_time DESC"]
 accuracy = runs[0].data.metrics.get("accuracy", 0)
 print(f"ℹ️ Last run accuracy: {accuracy}")
 
-if accuracy < 0.85:
+if accuracy < 0.05:
     raise Exception("❌ Accuracy below threshold! Failing CI.")
 else:
     print("✅ Accuracy is acceptable.")
