@@ -127,10 +127,9 @@ jobs:
       - name: 🧪 Install GitHub CLI
         run: sudo apt-get install gh -y
 
-      - name: 🔐 Authenticate GitHub CLI
-        run: gh auth login --with-token <<< "${{ secrets.GH_TOKEN }}"
-
       - name: 🚀 Create & Merge PR to main
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           gh pr create --base main --head dev --title "Auto promotion from dev to main" --body "✅ All checks passed. Promoting to main." || echo "PR already exists or failed to create."
           gh pr merge dev --merge --admin || echo "Merge failed or already done."
