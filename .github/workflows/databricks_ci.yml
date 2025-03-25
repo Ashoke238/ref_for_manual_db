@@ -45,7 +45,7 @@ jobs:
 
       - name: 📦 Install dependencies
         run: pip install requests mlflow
-
+        
       - name: 🚀 Trigger Databricks Train Job
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
@@ -95,7 +95,9 @@ jobs:
           JOB_ID: 643177853687692  # Replace with your inference job ID
           RUN_ID_FILE: inference_run_id.txt
         run: python trigger_job.py
-
+        
+      - name: 🚀 Run train notebook (check for errors)
+        run: |
       - name: 🔁 Export RUN_ID for inference
         run: echo "RUN_ID=$(cat inference_run_id.txt)" >> $GITHUB_ENV
 
@@ -132,4 +134,3 @@ jobs:
         run: |
           gh pr create --base main --head dev --title "Auto promotion from dev to main" --body "✅ All checks passed. Promoting to main." || echo "PR already exists or failed to create."
           gh pr merge dev --merge --admin || echo "Merge failed or already done."
-
